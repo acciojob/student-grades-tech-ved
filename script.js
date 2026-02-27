@@ -1,22 +1,20 @@
 import fs from "fs/promises";
 
-async function getStudentAverages() {
-    try {
-        const data = await fs.readFile("students.csv", "utf-8");
-        const lines = data.trim().split("\n");
-        
-        // skip header
-        for (let i = 1; i < lines.length; i++) {
-            const parts = lines[i].split(",");
-            const name = parts[0];
-            const marks = parts.slice(1).map(Number);
-            
-            const avg = marks.reduce((a, b) => a + b, 0) / marks.length;
-            console.log(`${name}: ${avg}`);
-        }
-    } catch (err) {
-        console.error(err);
-    }
+async function main() {
+  try {
+    const data = await fs.readFile("students.json", "utf-8");
+    const students = JSON.parse(data);
+
+    students.forEach(student => {
+      const marks = student.marks;
+      const avg =
+        marks.reduce((sum, m) => sum + m, 0) / marks.length;
+
+      console.log(`${student.name}: ${avg}`);
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-getStudentAverages();
+main();
