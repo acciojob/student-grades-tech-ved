@@ -1,19 +1,17 @@
-import fs from "fs/promises";
+const fs = require("fs");
 
-async function solve() {
-  try {
-    const data = await fs.readFile("students.json", "utf-8");
+fs.readFile("students.json", "utf8", (err, data) => {
+    if (err) {
+        console.error(err);
+        return;
+    }
+
     const students = JSON.parse(data);
 
-    students.forEach(s => {
-      const avg =
-        s.marks.reduce((a, b) => a + b, 0) / s.marks.length;
+    students.forEach(student => {
+        let sum = student.grades.reduce((a, b) => a + b, 0);
+        let avg = sum / student.grades.length;
 
-      console.log(`${s.name}: ${avg}`);
+        console.log(student.name + ":", avg);
     });
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-solve();
+});
